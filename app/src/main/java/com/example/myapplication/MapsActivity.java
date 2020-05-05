@@ -11,7 +11,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener {
 
     private GoogleMap mMap;
 
@@ -38,10 +38,36 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        mMap.setMyLocationEnabled(true);
+        mMap.setOnMyLocationButtonClickListener(this);
+        //mMap.getCameraPosition();
+        initiateMarkers(mMap);
+        move(getIntent().getDoubleExtra("latitude", 0),
+                getIntent().getDoubleExtra("longitude", 0));
     }
+
+    private void initiateMarkers(GoogleMap mMap) {
+        LatLng EngHall = new LatLng(40.110837, -88.226910);
+        LatLng Grainger = new LatLng(40.112470, -88.226917);
+        LatLng Licoln = new LatLng(40.106401, -88.228420);
+        LatLng Foe = new LatLng(40.106060, -88.227076);
+        LatLng Dkh = new LatLng(40.103847, -88.228422);
+        mMap.addMarker(new MarkerOptions().position(EngHall).title("toilet in Enghall"));
+        mMap.addMarker(new MarkerOptions().position(Grainger).title("toilet in Grainger"));
+        mMap.addMarker(new MarkerOptions().position(Licoln).title("toilet in Lincoln"));
+        mMap.addMarker(new MarkerOptions().position(Foe).title("toilet in foellinger"));
+        mMap.addMarker(new MarkerOptions().position(Dkh).title("toilet in DavidKiley"));
+    }
+
+    @Override
+    public boolean onMyLocationButtonClick() {
+        return false;
+    }
+
+    private void move(double latitude, double longitude) {
+        LatLng latLng = new LatLng(latitude, longitude);
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+    }
+
+
 }
